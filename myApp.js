@@ -56,13 +56,13 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', personSchema);
 
 const createAndSavePerson = function(done) {
-  const ivan = new Person({
+  const irvin = new Person({
     name: "Irvin",
     age: 25,
     favoriteFoods: ['Pizza', 'french fries', 'burger', "cholesterol"]
   });
   
-  ivan.save((err, data)=> err ? done(err) : done(null, data));
+  irvin.save((err, data)=> err ? done(err) : done(null, data));
 };
 // **Note**: Glitch is a real server, and in real servers interactions with
 // the db are placed in handler functions, to be called when some event happens
