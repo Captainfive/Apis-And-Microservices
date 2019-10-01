@@ -158,7 +158,7 @@ const findOneByFood = function(food, done) {
 // using `Model.findById() -> Person`.
 // Use the function argument 'personId' as search key.
 
-var findPersonById = function(personId, done) {
+const findPersonById = function(personId, done) {
   Person.findById(personId, function (err, data) {
     if(err) {
       done(err);
@@ -240,7 +240,7 @@ const findAndUpdate = function(personName, done) {
 // previous update methods. They pass the removed document to the cb.
 // As usual, use the function argument `personId` as search key.
 
-var removeById = function(personId, done) {
+const removeById = function(personId, done) {
   Person.findByIdAndRemove(personId, function (err, data) {
     if (err) {
       done(err);
