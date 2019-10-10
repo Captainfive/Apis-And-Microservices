@@ -16,10 +16,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Connection to the Database
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
 /** # SCHEMAS and MODELS #
 /*  ====================== */
 
@@ -43,7 +45,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // fields, use simple validators like `required` or `unique`, and set
 // `default` values. See the [mongoose docs](http://mongoosejs.com/docs/guide.html).
 
-// <Your code here >
+// Create schema for Person
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -53,16 +55,18 @@ const personSchema = new mongoose.Schema({
   favoriteFoods: [String]
 });
 
+// Create Model for Person
 const Person = mongoose.model('Person', personSchema);
 
-const createAndSavePerson = function(done) {
+const createAndSavePerson = function (done) {
   const irvin = new Person({
     name: "Irvin",
     age: 25,
     favoriteFoods: ['Pizza', 'french fries', 'burger', "cholesterol"]
   });
-  
-  irvin.save((err, data)=> err ? done(err) : done(null, data));
+
+  // Save Person
+  irvin.save((err, data) => err ? done(err) : done(null, data));
 };
 // **Note**: Glitch is a real server, and in real servers interactions with
 // the db are placed in handler functions, to be called when some event happens
@@ -74,7 +78,7 @@ const createAndSavePerson = function(done) {
 // **Warning** - When interacting with remote services, **errors may occur** !
 
 
-  // assign a function to the "methods" object of our animalSchema
+// assign a function to the "methods" object of our animalSchema
 /** # [C]RUD part I - CREATE #
 /*  ========================== */
 
@@ -102,15 +106,17 @@ const createAndSavePerson = function(done) {
 // as the 1st argument, and saves them all in the db.
 // Create many people using `Model.create()`, using the function argument
 // 'arrayOfPeople'.
+
+// Function who permit to create and save many Person
 const createManyPeople = function (arrayOfPeople, done) {
-    Person.create(arrayOfPeople, function (err, data) {
-        if (err) {
-            done(err);
-        }
-        done(null, data);
-    });
+  Person.create(arrayOfPeople, function (err, data) {
+    if (err) {
+      done(err);
+    }
+    done(null, data);
+  });
 };
-  
+
 /** # C[R]UD part II - READ #
 /*  ========================= */
 
@@ -122,9 +128,10 @@ const createManyPeople = function (arrayOfPeople, done) {
 // It supports an extremely wide range of search options. Check it in the docs.
 // Use the function argument `personName` as search key.
 
-const findPeopleByName = function(personName, done) {
-  Person.find({ name: `${personName}`}, function (err, data) {
-    if(err) {
+// Find a person with a name condition
+const findPeopleByName = function (personName, done) {
+  Person.find({ name: `${personName}` }, function (err, data) {
+    if (err) {
       done(err);
     }
     done(null, data);
@@ -140,13 +147,14 @@ const findPeopleByName = function(personName, done) {
 // using `Model.findOne() -> Person`. Use the function
 // argument `food` as search key
 
-const findOneByFood = function(food, done) {
+// Find a person with his favorite food as a condition
+const findOneByFood = function (food, done) {
   Person.findOne({ favoriteFoods: `${food}` }, function (err, data) {
-    if(err) {
+    if (err) {
       done(err);
     }
     done(null, data);
-  })  
+  })
 };
 
 /** 7) Use `Model.findById()` */
@@ -158,13 +166,14 @@ const findOneByFood = function(food, done) {
 // using `Model.findById() -> Person`.
 // Use the function argument 'personId' as search key.
 
-const findPersonById = function(personId, done) {
+// Find a person with his id as a condition
+const findPersonById = function (personId, done) {
   Person.findById(personId, function (err, data) {
-    if(err) {
+    if (err) {
       done(err);
     }
     done(null, data);
-  })   
+  })
 };
 
 /** # CR[U]D part III - UPDATE # 
@@ -192,9 +201,10 @@ const findPersonById = function(personId, done) {
 // manually mark it as edited using `document.markModified('edited-field')`
 // (http://mongoosejs.com/docs/schematypes.html - #Mixed )
 
-const findEditThenSave = function(personId, done) {
-    const foodToAdd = 'hamburger';
-  Person.findOneAndUpdate(personId, { favoriteFoods: `${foodToAdd}` }, function(err, data) {
+// Find a person with his id as a condition and modify her favorite foods
+const findEditThenSave = function (personId, done) {
+  const foodToAdd = "hamburger";
+  Person.findOneAndUpdate(personId, { favoriteFoods: `${foodToAdd}` }, function (err, data) {
     if (err) {
       done(err);
     }
@@ -217,9 +227,10 @@ const findEditThenSave = function(personId, done) {
 // to `findOneAndUpdate()`. By default the method
 // passes the unmodified object to its callback.
 
-const findAndUpdate = function(personName, done) {
-    const ageToSet = 20;
-    Person.findOneAndUpdate({ name: personName }, { age: ageToSet }, { new: true }, function(err, data) {
+// Find a person with his name as a condition and add him an age
+const findAndUpdate = function (personName, done) {
+  const ageToSet = 20;
+  Person.findOneAndUpdate({ name: personName }, { age: ageToSet }, { new: true }, function (err, data) {
     if (err) {
       done(err);
     }
@@ -240,7 +251,8 @@ const findAndUpdate = function(personName, done) {
 // previous update methods. They pass the removed document to the cb.
 // As usual, use the function argument `personId` as search key.
 
-const removeById = function(personId, done) {
+// Find a person with his id as a condition and delete him from database
+const removeById = function (personId, done) {
   Person.findByIdAndRemove(personId, function (err, data) {
     if (err) {
       done(err);
@@ -259,13 +271,14 @@ const removeById = function(personId, done) {
 // containing the outcome of the operation, and the number of items affected.
 // Don't forget to pass it to the `done()` callback, since we use it in tests.
 
-const removeManyPeople = function(done) {
-    const nameToRemove = "Mary";
-  Person.remove({ name: nameToRemove }, function(err, data) {
+// Find multiple people with their identifier as a condition and delete them from the database
+const removeManyPeople = function (done) {
+  const nameToRemove = "Mary";
+  Person.remove({ name: nameToRemove }, function (err, data) {
     if (err) {
       done(err);
     }
-      done(null, data);
+    done(null, data);
   });
 };
 
@@ -287,15 +300,16 @@ const removeManyPeople = function(done) {
 // Chain `.find()`, `.sort()`, `.limit()`, `.select()`, and then `.exec()`,
 // passing the `done(err, data)` callback to it.
 
-const queryChain = function(done) {
+// Search for people who love burriots and chain queries
+const queryChain = function (done) {
   const foodToSearch = "burrito";
   const recherchedObject = { favoriteFoods: foodToSearch };
-  
-  Person.find(recherchedObject).sort({ name: 1}).limit(2).select({ age: 0 }).exec(function(err, data) {
+
+  Person.find(recherchedObject).sort({ name: 1 }).limit(2).select({ age: 0 }).exec(function (err, data) {
     if (err) {
       done(err);
     }
-      done(null, data);
+    done(null, data);
   })
 };
 
